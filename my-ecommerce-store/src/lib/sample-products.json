@@ -3,18 +3,18 @@
         "id": "1",
         "name": "Classic Leather Jacket",
         "price": 199.99,
-        "image": "https://images.unsplash.com/photo-1526178611926-1d1d6a6f0b7f?q=80&w=1400&auto=format&fit=crop"
+        "image": "https://source.unsplash.com/900x900/?leather-jacket,coat"
     },
     {
         "id": "2",
         "name": "Everyday Sneakers",
         "price": 89.99,
-        "image": "https://images.unsplash.com/photo-1526178611926-1d1d6a6f0b7f?q=80&w=1400&auto=format&fit=crop"
+        "image": "https://source.unsplash.com/900x900/?sneakers,shoes"
     },
     {
         "id": "3",
         "name": "Minimalist Watch",
         "price": 129.99,
-        "image": "https://images.unsplash.com/photo-1519741491640-7b6b6d9ffb0b?q=80&w=1400&auto=format&fit=crop"
+        "image": "https://source.unsplash.com/900x900/?watch,minimal"
     }
 ]

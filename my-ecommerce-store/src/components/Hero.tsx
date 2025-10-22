@@ -49,10 +49,10 @@ export default function Hero() {
                 <div className="relative hidden h-64 md:block">
                     {/* Collage of two images */}
                     <div className="absolute right-0 top-0 h-64 w-64 overflow-hidden rounded-md shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1526178611926-1d1d6a6f0b7f?q=80&w=900&auto=format&fit=crop" alt="Sneakers" className="h-full w-full object-cover" />
+                        <img src="https://source.unsplash.com/900x900/?sneakers" alt="Sneakers" className="h-full w-full object-cover" />
                     </div>
                     <div className="absolute -right-8 bottom-0 h-48 w-48 overflow-hidden rounded-md border-4 border-white shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1520975916045-3e6eb0c3b8b8?q=80&w=900&auto=format&fit=crop" alt="Jacket" className="h-full w-full object-cover" />
+                        <img src="https://source.unsplash.com/600x600/?jacket" alt="Jacket" className="h-full w-full object-cover" />
                     </div>
                 </div>
             </div>
