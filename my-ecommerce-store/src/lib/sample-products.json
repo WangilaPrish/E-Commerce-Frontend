@@ -1,20 +1,20 @@
 [
-  {
-    "id": "1",
-    "name": "Classic Leather Jacket",
-    "price": 199.99,
-    "image": "/products/jacket.jpg"
-  },
-  {
-    "id": "2",
-    "name": "Everyday Sneakers",
-    "price": 89.99,
-    "image": "/products/sneakers.jpg"
-  },
-  {
-    "id": "3",
-    "name": "Minimalist Watch",
-    "price": 129.99,
-    "image": "/products/watch.jpg"
-  }
+    {
+        "id": "1",
+        "name": "Classic Leather Jacket",
+        "price": 199.99,
+        "image": "/products/jacket.jpg"
+    },
+    {
+        "id": "2",
+        "name": "Everyday Sneakers",
+        "price": 89.99,
+        "image": "/products/sneakers.jpg"
+    },
+    {
+        "id": "3",
+        "name": "Minimalist Watch",
+        "price": 129.99,
+        "image": "/products/watch.jpg"
+    }
 ]
