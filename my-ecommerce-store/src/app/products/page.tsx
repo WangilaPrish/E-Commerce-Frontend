@@ -1,9 +1,9 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard";
 import ProductsFilter from "../../components/ProductsFilter";
-import { useSearchParams } from "next/navigation";
 
 const CATEGORIES = ["men", "women", "accessories"];
 
