@@ -5,6 +5,9 @@ import FeaturedProducts from "../components/FeaturedProducts";
 import Hero from "../components/Hero";
 import Newsletter from "../components/Newsletter";
 import products from "../lib/sample-products.json";
+import TopSellers from "../components/TopSellers";
+import Testimonials from "../components/Testimonials";
+import Footer from "../components/Footer";
 
 export default function Home() {
     return (
@@ -13,7 +16,10 @@ export default function Home() {
                 <Hero />
                 <FeaturedProducts products={products as any} />
                 <CategoryGrid />
+                <TopSellers />
+                <Testimonials />
                 <Newsletter />
+                <Footer />
             </main>
         </div>
     );
