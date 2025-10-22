@@ -2,12 +2,12 @@
 
 import CategoryGrid from "../components/CategoryGrid";
 import FeaturedProducts from "../components/FeaturedProducts";
+import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Newsletter from "../components/Newsletter";
-import products from "../lib/sample-products.json";
-import TopSellers from "../components/TopSellers";
 import Testimonials from "../components/Testimonials";
-import Footer from "../components/Footer";
+import TopSellers from "../components/TopSellers";
+import products from "../lib/sample-products.json";
 
 export default function Home() {
     return (
