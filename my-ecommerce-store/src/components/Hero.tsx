@@ -1,24 +1,60 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Hero() {
+    const router = useRouter();
+    const [q, setQ] = useState("");
+
+    function onSearch(e: React.FormEvent) {
+        e.preventDefault();
+        const encoded = encodeURIComponent(q.trim());
+        if (!encoded) return router.push(`/products`);
+        router.push(`/products?search=${encoded}`);
+    }
+
     return (
         <section className="relative w-full overflow-hidden rounded-lg bg-linear-to-r from-amber-400 via-orange-400 to-pink-500 p-8 text-white">
-            <div className="mx-auto max-w-6xl flex flex-col gap-6 md:flex-row md:items-center">
-                <div className="flex-1">
-                    <h2 className="text-4xl font-extrabold leading-tight">Discover your next favorite outfit</h2>
-                    <p className="mt-3 max-w-xl">Trending picks curated by stylists. Free shipping on orders over $75.</p>
-                    <div className="mt-6 flex gap-4">
-                        <Link href="/products" className="rounded-md bg-black/90 px-5 py-3 font-semibold text-white">
-                            Shop Now
-                        </Link>
-                        <Link href="/products" className="rounded-md border border-white/30 px-5 py-3">
-                            Browse
-                        </Link>
+            <div className="mx-auto max-w-6xl grid gap-6 md:grid-cols-2 md:items-center">
+                <div>
+                    <div className="inline-flex items-center gap-3">
+                        <span className="rounded-full bg-black/10 px-3 py-1 text-sm font-semibold">New</span>
+                        <span className="text-sm">Free shipping over $75</span>
+                    </div>
+
+                    <h1 className="mt-4 text-4xl font-extrabold leading-tight">Upgrade your wardrobe — limited time deals</h1>
+                    <p className="mt-3 max-w-xl text-lg">Shop handpicked collections. Quality pieces that last — curated just for you.</p>
+
+                    <form onSubmit={onSearch} className="mt-6 flex w-full max-w-lg gap-2">
+                        <label htmlFor="hero-search" className="sr-only">Search products</label>
+                        <input
+                            id="hero-search"
+                            value={q}
+                            onChange={(e) => setQ(e.target.value)}
+                            placeholder="Search products, e.g. 'sneakers'"
+                            className="flex-1 rounded-md border border-white/30 bg-white/10 px-4 py-2 text-white placeholder:text-white/70 focus:outline-none"
+                        />
+                        <button type="submit" className="rounded-md bg-black/90 px-4 py-2 font-semibold">Search</button>
+                    </form>
+
+                    <div className="mt-4 flex flex-wrap gap-3">
+                        <Link href="/products?cat=men" className="rounded-md bg-white/20 px-3 py-2 text-sm">Men</Link>
+                        <Link href="/products?cat=women" className="rounded-md bg-white/20 px-3 py-2 text-sm">Women</Link>
+                        <Link href="/products?cat=accessories" className="rounded-md bg-white/20 px-3 py-2 text-sm">Accessories</Link>
                     </div>
                 </div>
-                <div className="relative hidden h-52 w-52 flex-0 md:block">
-                    <Image src="/hero-sample.jpg" alt="Hero image" fill className="object-cover rounded-md" />
+
+                <div className="relative hidden h-64 md:block">
+                    {/* Collage of two images */}
+                    <div className="absolute right-0 top-0 h-64 w-64 overflow-hidden rounded-md shadow-lg">
+                        <Image src="/products/sneakers.jpg" alt="Sneakers" fill className="object-cover" />
+                    </div>
+                    <div className="absolute -right-8 bottom-0 h-48 w-48 overflow-hidden rounded-md border-4 border-white shadow-lg">
+                        <Image src="/products/jacket.jpg" alt="Jacket" fill className="object-cover" />
+                    </div>
                 </div>
             </div>
         </section>
