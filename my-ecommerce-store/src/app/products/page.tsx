@@ -29,27 +29,14 @@ export default function ProductsPage() {
 
     async function fetchPage(p: number, replace = false) {
         setLoading(true);
-        const externalId = searchParams.get("itemId");
-        if (externalId) {
-            // fetch a single item from the ali express proxy API and map to our product shape
+        const itemIds = searchParams.get("itemIds");
+        if (itemIds) {
+            // fetch mapped external items via our API
             try {
-                const r = await fetch(`/api/aliexpress?itemId=${encodeURIComponent(externalId)}`);
-                const data = await r.json();
-                // try a few common fields for title/price/image
-                const title = data?.title || data?.itemTitle || data?.name || data?.productTitle || data?.data?.title || null;
-                const priceRaw = data?.price || data?.productPrice || data?.price_value || data?.data?.price || null;
-                const price = priceRaw ? Number(priceRaw) : 0;
-                const image = data?.image || data?.image_url || data?.images?.[0] || data?.data?.image || "https://source.unsplash.com/400x400/?product";
-
-                const mapped = {
-                    id: externalId,
-                    name: title || `External product ${externalId}`,
-                    price: isNaN(price) ? 0 : price,
-                    image,
-                };
-
-                setTotal(1);
-                setItems([mapped]);
+                const res = await fetch(`/api/products?itemIds=${encodeURIComponent(itemIds)}`);
+                const json = await res.json();
+                setTotal(json.total || 0);
+                setItems((cur) => (replace ? json.items : [...cur, ...json.items]));
                 setLoading(false);
                 return;
             } catch (err) {
