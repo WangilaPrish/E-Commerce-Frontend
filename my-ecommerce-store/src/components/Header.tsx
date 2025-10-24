@@ -13,15 +13,16 @@ export default function Header() {
                     <Link href="/products" className="hover:underline">
                         Products
                     </Link>
+                    <Link href="/cart" className="rounded-full bg-black/90 px-4 py-2 text-white">
+                        Cart
+                    </Link>
                     <Link href="/about" className="hover:underline">
                         About
                     </Link>
                     <Link href="/contact" className="hover:underline">
                         Contact
                     </Link>
-                    <Link href="/cart" className="rounded-full bg-black/90 px-4 py-2 text-white">
-                        Cart
-                    </Link>
+
                 </nav>
             </div>
         </header>
