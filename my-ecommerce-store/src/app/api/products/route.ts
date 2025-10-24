@@ -4,6 +4,8 @@ import products from "../../../lib/sample-products.json";
 // Simple in-memory cache for AliExpress lookups (dev-only). TTL = 5 minutes.
 const aliCache = new Map<string, { ts: number; data: any }>();
 const CACHE_TTL = 1000 * 60 * 5;
+// Separate cache for search queries
+const aliSearchCache = new Map<string, { ts: number; data: any }>();
 
 async function fetchAliItem(itemId: string, rapidKey: string) {
   const now = Date.now();
@@ -105,6 +107,77 @@ export async function GET(request: Request) {
   const maxPrice = maxPriceParam ? Number(maxPriceParam) : undefined;
   const page = Number(url.searchParams.get("page") || "1");
   const limit = Number(url.searchParams.get("limit") || "12");
+  const external = (url.searchParams.get("external") || "0") === "1" || (url.searchParams.get("external") || "false") === "true";
+  const sort = url.searchParams.get("sort") || "default";
+
+  // If external search is requested (external=1 & search present), call AliExpress item_search
+  if (external && search) {
+    const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
+    if (!RAPIDAPI_KEY) {
+      return NextResponse.json({ error: "RAPIDAPI_KEY not configured on server" }, { status: 500 });
+    }
+
+    // cache key based on query + page + sort
+    const cacheKey = `search:${search}:page:${page}:limit:${limit}:sort:${sort}`;
+    const now = Date.now();
+    const cached = aliSearchCache.get(cacheKey);
+    if (cached && now - cached.ts < CACHE_TTL) {
+      return NextResponse.json(cached.data);
+    }
+
+    const target = `https://aliexpress-datahub.p.rapidapi.com/item_search?q=${encodeURIComponent(
+      search
+    )}&page=${encodeURIComponent(String(page))}&sort=${encodeURIComponent(sort)}`;
+
+    try {
+      const res = await fetch(target, {
+        method: "GET",
+        headers: {
+          "x-rapidapi-key": RAPIDAPI_KEY,
+          "x-rapidapi-host": "aliexpress-datahub.p.rapidapi.com",
+        },
+      });
+      const text = await res.text();
+      let json: any;
+      try {
+        json = JSON.parse(text);
+      } catch (err) {
+        json = { data: text };
+      }
+
+      // Map resultList entries to our product model
+      const results: any[] = [];
+      if (json?.resultList && Array.isArray(json.resultList)) {
+        for (const r of json.resultList) {
+          const it = r.item || {};
+          const price = it?.sku?.def?.promotionPrice ?? it?.sku?.def?.prices?.pc ?? null;
+          const image = it?.image ?? (it?.images && it.images[0]) ?? null;
+          results.push({
+            id: String(it.itemId ?? it.item_id ?? it.id ?? ""),
+            name: it.title ?? it.itemTitle ?? it.name ?? `Ali item ${it.itemId ?? ""}`,
+            price: price ? Number(price) : 0,
+            image: normalizeImageUrl(image) || "https://source.unsplash.com/400x400/?product",
+            rating: it.averageStarRate ?? null,
+            shipping: r.delivery ?? null,
+            raw: it,
+          });
+        }
+      }
+
+      const payload = {
+        items: results,
+        total: json?.base?.totalResults ?? json?.totalResults ?? results.length,
+        page,
+        limit,
+        raw: json,
+      };
+
+      aliSearchCache.set(cacheKey, { ts: now, data: payload });
+      return NextResponse.json(payload);
+    } catch (err) {
+      return NextResponse.json({ error: "Failed to fetch external search" }, { status: 502 });
+    }
+  }
 
   // If itemIds is present, fetch those items from AliExpress via RapidAPI and return them.
   const itemIdsParam = url.searchParams.get("itemIds");
