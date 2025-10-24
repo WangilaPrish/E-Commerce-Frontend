@@ -34,7 +34,19 @@ export default function ProductDetailClient({ itemId }: { itemId: string }) {
                 <div>
                     <h1 className="text-2xl font-bold">{item.name}</h1>
                     <div className="mt-4 text-xl font-semibold">${Number(item.price).toFixed(2)}</div>
+                    {item.rating != null && (
+                        <div className="mt-2 text-sm text-yellow-600">⭐ {String(item.rating)}</div>
+                    )}
                     <p className="mt-6 text-sm text-zinc-600">{item.description || item.name}</p>
+                    {item.shipping && (
+                        <div className="mt-4 text-sm text-zinc-700">
+                            {item.shipping.freeShipping ? (
+                                <span className="text-green-600">Free shipping</span>
+                            ) : (
+                                <span>{item.shipping.shippingDisplay || item.shipping.shippingFee ? `Shipping: ${item.shipping.shippingFee ?? "—"}` : "Shipping info not available"}</span>
+                            )}
+                        </div>
+                    )}
                     <div className="mt-6">
                         <button className="rounded-md bg-black/90 px-4 py-2 text-white">Add to cart</button>
                     </div>

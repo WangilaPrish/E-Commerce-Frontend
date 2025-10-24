@@ -47,7 +47,12 @@ export default function ProductsPage() {
             }
         }
         const params = new URLSearchParams();
-        if (search) params.set("search", search);
+        if (search) {
+            // For development, prefer the FakeStore provider for live search results.
+            params.set("search", search);
+            params.set("external", "1");
+            params.set("provider", "fakestore");
+        }
         if (cat) params.set("cat", cat);
         if (maxPrice !== undefined) params.set("maxPrice", String(maxPrice));
         params.set("page", String(p));
