@@ -109,20 +109,59 @@ export async function GET(request: Request) {
   const limit = Number(url.searchParams.get("limit") || "12");
   const external = (url.searchParams.get("external") || "0") === "1" || (url.searchParams.get("external") || "false") === "true";
   const sort = url.searchParams.get("sort") || "default";
+  const provider = (url.searchParams.get("provider") || url.searchParams.get("externalProvider") || "aliexpress").toLowerCase();
 
-  // If external search is requested (external=1 & search present), call AliExpress item_search
+  // If external search is requested (external=1 & search present), support multiple providers
   if (external && search) {
+    const cacheKey = `search:${provider}:${search}:page:${page}:limit:${limit}:sort:${sort}`;
+    const now = Date.now();
+    const cached = aliSearchCache.get(cacheKey) || aliSearchCache.get(cacheKey); // re-use aliSearchCache map for simplicity
+    if (cached && now - cached.ts < CACHE_TTL) {
+      return NextResponse.json(cached.data);
+    }
+
+    // Provider: fakestore (dev-friendly public API)
+    if (provider === "fakestore") {
+      try {
+        const res = await fetch("https://fakestoreapi.com/products");
+        const json = await res.json();
+
+        // Filter client-side by title (fake store doesn't support server q param)
+        const q = String(search).toLowerCase();
+        const filtered = Array.isArray(json) ? json.filter((it: any) => String(it.title || "").toLowerCase().includes(q)) : [];
+
+        const totalResults = filtered.length;
+        const start = (page - 1) * limit;
+        const end = start + limit;
+        const pageItems = filtered.slice(start, end).map((it: any) => ({
+          id: String(it.id),
+          name: it.title,
+          price: Number(it.price ?? 0),
+          image: it.image || "https://source.unsplash.com/400x400/?product",
+          rating: it?.rating?.rate ?? null,
+          shipping: null,
+          raw: it,
+        }));
+
+        const payload = { items: pageItems, total: totalResults, page, limit, raw: json };
+        aliSearchCache.set(cacheKey, { ts: now, data: payload });
+        return NextResponse.json(payload);
+      } catch (err) {
+        return NextResponse.json({ error: "Failed to fetch FakeStore provider" }, { status: 502 });
+      }
+    }
+
+    // Default provider: aliexpress (existing logic)
     const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
     if (!RAPIDAPI_KEY) {
       return NextResponse.json({ error: "RAPIDAPI_KEY not configured on server" }, { status: 500 });
     }
 
-    // cache key based on query + page + sort
-    const cacheKey = `search:${search}:page:${page}:limit:${limit}:sort:${sort}`;
-    const now = Date.now();
-    const cached = aliSearchCache.get(cacheKey);
-    if (cached && now - cached.ts < CACHE_TTL) {
-      return NextResponse.json(cached.data);
+    // cache key based on provider/query + page + sort
+    const aliCacheKey = cacheKey;
+    const cachedAli = aliSearchCache.get(aliCacheKey);
+    if (cachedAli && now - cachedAli.ts < CACHE_TTL) {
+      return NextResponse.json(cachedAli.data);
     }
 
     const target = `https://aliexpress-datahub.p.rapidapi.com/item_search?q=${encodeURIComponent(
@@ -172,7 +211,7 @@ export async function GET(request: Request) {
         raw: json,
       };
 
-      aliSearchCache.set(cacheKey, { ts: now, data: payload });
+      aliSearchCache.set(aliCacheKey, { ts: now, data: payload });
       return NextResponse.json(payload);
     } catch (err) {
       return NextResponse.json({ error: "Failed to fetch external search" }, { status: 502 });
