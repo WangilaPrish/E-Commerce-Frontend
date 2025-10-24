@@ -17,6 +17,7 @@ export default function ProductsPage() {
     const cat = searchParams.get("cat") || undefined;
     const search = searchParams.get("search") || undefined;
     const maxPrice = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined;
+    const externalItemId = searchParams.get("itemId") || undefined;
 
     useEffect(() => {
         // whenever filters or search params change, reset to page 1 and fetch
@@ -28,6 +29,36 @@ export default function ProductsPage() {
 
     async function fetchPage(p: number, replace = false) {
         setLoading(true);
+        const externalId = searchParams.get("itemId");
+        if (externalId) {
+            // fetch a single item from the ali express proxy API and map to our product shape
+            try {
+                const r = await fetch(`/api/aliexpress?itemId=${encodeURIComponent(externalId)}`);
+                const data = await r.json();
+                // try a few common fields for title/price/image
+                const title = data?.title || data?.itemTitle || data?.name || data?.productTitle || data?.data?.title || null;
+                const priceRaw = data?.price || data?.productPrice || data?.price_value || data?.data?.price || null;
+                const price = priceRaw ? Number(priceRaw) : 0;
+                const image = data?.image || data?.image_url || data?.images?.[0] || data?.data?.image || "https://source.unsplash.com/400x400/?product";
+
+                const mapped = {
+                    id: externalId,
+                    name: title || `External product ${externalId}`,
+                    price: isNaN(price) ? 0 : price,
+                    image,
+                };
+
+                setTotal(1);
+                setItems([mapped]);
+                setLoading(false);
+                return;
+            } catch (err) {
+                setLoading(false);
+                setItems([]);
+                setTotal(0);
+                return;
+            }
+        }
         const params = new URLSearchParams();
         if (search) params.set("search", search);
         if (cat) params.set("cat", cat);
