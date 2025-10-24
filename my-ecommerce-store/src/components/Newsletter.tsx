@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function Newsletter() {
     const [email, setEmail] = useState("");
@@ -64,7 +64,7 @@ export default function Newsletter() {
                 </button>
             </form>
 
-                    <div id="newsletter-status" ref={liveRef} aria-live="polite" className="mt-2 min-h-5">
+            <div id="newsletter-status" ref={liveRef} aria-live="polite" className="mt-2 min-h-5">
                 {message && (
                     <p className={`text-sm ${status === "success" ? "text-green-600" : "text-red-600"}`}>{message}</p>
                 )}
