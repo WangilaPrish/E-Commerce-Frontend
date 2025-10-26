@@ -9,7 +9,7 @@ export default function Header() {
                 <Link href="/" className="text-2xl font-bold tracking-tight">
                     NovaThreads
                 </Link>
-                <nav className="flex items-center gap-6 text-sm font-medium">
+                <nav className="flex flex-wrap items-center gap-4 text-sm font-medium">
                     <Link href="/products" className="hover:underline">
                         Products
                     </Link>
