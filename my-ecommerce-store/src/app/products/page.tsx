@@ -87,7 +87,7 @@ export default function ProductsPage() {
 
                 {items.length < total && !loading && (
                     <div className="mt-6 flex justify-center">
-                        <button onClick={loadMore} className="rounded-md bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-500 px-6 py-2 text-white shadow-md hover:opacity-95">Load more</button>
+                        <button onClick={loadMore} className="rounded-md bg-linear-to-r from-indigo-600 via-purple-600 to-violet-500 px-6 py-2 text-white shadow-md hover:opacity-95">Load more</button>
                     </div>
                 )}
             </div>

@@ -11,15 +11,26 @@ type Props = {
 
 export default function ProductCard({ id, name, price, image }: Props) {
     return (
-        <article className="group rounded-lg border p-4 transition-transform hover:scale-[1.03]">
+        <article className="group relative overflow-hidden rounded-lg border border-transparent bg-white p-4 shadow-sm transition-all hover:shadow-lg hover:scale-[1.02] dark:bg-[#07111a]">
             <Link href={`/products/${id}`} className="block">
-                <div className="mb-3 h-48 w-full overflow-hidden rounded-md bg-gray-100">
-                    {/* Use plain img so remote images render even if next/image loader is not configured */}
-                    <img src={image} alt={name} className="h-full w-full object-cover" />
+                <div className="mb-3 overflow-hidden rounded-md bg-gray-100">
+                    <div className="relative h-56 w-full">
+                        {/* plain img so remote images render even if next/image loader is not configured */}
+                        <img src={image} alt={name} className="absolute inset-0 h-full w-full object-cover" />
+                    </div>
                 </div>
-                <h4 className="text-sm font-medium">{name}</h4>
-                <div className="mt-2 text-sm font-semibold">${price.toFixed(2)}</div>
+
+                <h4 className="truncate text-sm font-medium">{name}</h4>
+                <div className="mt-2 flex items-baseline justify-between">
+                    <div className="text-base font-semibold text-indigo-600">${price.toFixed(2)}</div>
+                    <div className="text-xs text-gray-500">In stock</div>
+                </div>
             </Link>
+
+            {/* Hover actions */}
+            <div className="pointer-events-none absolute inset-x-4 bottom-4 flex translate-y-3 items-center justify-end opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
+                <button className="pointer-events-auto rounded-md bg-indigo-600 px-3 py-1 text-sm font-medium text-white shadow">Add</button>
+            </div>
         </article>
     );
 }
