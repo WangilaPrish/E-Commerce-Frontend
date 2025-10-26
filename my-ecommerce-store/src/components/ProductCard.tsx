@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import { addItem } from "../lib/cart";
 
 type Props = {
     id: string;
@@ -10,6 +12,16 @@ type Props = {
 };
 
 export default function ProductCard({ id, name, price, image }: Props) {
+    const [added, setAdded] = useState(false);
+
+    function onAdd(e: React.MouseEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+        addItem({ id, name, price, image, quantity: 1 });
+        setAdded(true);
+        setTimeout(() => setAdded(false), 1300);
+    }
+
     return (
         <article className="group relative overflow-hidden rounded-lg border border-transparent bg-white p-4 shadow-sm transition-all hover:shadow-lg hover:scale-[1.02] dark:bg-[#07111a]">
             <Link href={`/products/${id}`} className="block">
@@ -28,8 +40,8 @@ export default function ProductCard({ id, name, price, image }: Props) {
             </Link>
 
             {/* Hover actions */}
-            <div className="pointer-events-none absolute inset-x-4 bottom-4 flex translate-y-3 items-center justify-end opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
-                <button className="pointer-events-auto rounded-md bg-indigo-600 px-3 py-1 text-sm font-medium text-white shadow">Add</button>
+            <div className="absolute inset-x-4 bottom-4 flex translate-y-3 items-center justify-end opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
+                <button onClick={onAdd} className="rounded-md bg-indigo-600 px-3 py-1 text-sm font-medium text-white shadow">{added ? "Added" : "Add"}</button>
             </div>
         </article>
     );

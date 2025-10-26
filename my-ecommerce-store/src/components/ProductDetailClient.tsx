@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { addItem } from "../lib/cart";
 
 export default function ProductDetailClient({ itemId }: { itemId: string }) {
     const [item, setItem] = useState<any | null>(null);
@@ -48,7 +49,7 @@ export default function ProductDetailClient({ itemId }: { itemId: string }) {
                         </div>
                     )}
                     <div className="mt-6">
-                        <button className="rounded-md bg-black/90 px-4 py-2 text-white">Add to cart</button>
+                        <button onClick={() => { addItem({ id: item.id, name: item.name, price: Number(item.price), image: item.image, quantity: 1 }); alert('Added to cart'); }} className="rounded-md bg-black/90 px-4 py-2 text-white">Add to cart</button>
                     </div>
                 </div>
             </div>
