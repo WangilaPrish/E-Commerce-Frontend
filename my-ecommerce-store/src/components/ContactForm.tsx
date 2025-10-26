@@ -33,7 +33,7 @@ export default function ContactForm() {
             const res = await fetch(`/api/contact`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, subject, message }),
+                    body: JSON.stringify({ name, email, subject, message, website: "" }),
             });
             const json = await res.json();
             if (!res.ok) {
@@ -53,7 +53,16 @@ export default function ContactForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="mx-auto max-w-2xl space-y-4" aria-live="polite">
+            <form onSubmit={handleSubmit} className="mx-auto max-w-2xl space-y-4" aria-live="polite">
+                {/* Honeypot field for spam bots - visually hidden but included in POST body if filled */}
+                <input
+                    name="website"
+                    value={""}
+                    onChange={() => {}}
+                    style={{ display: "none" }}
+                    tabIndex={-1}
+                    aria-hidden
+                />
             <div>
                 <label className="mb-1 block text-sm font-medium">Name</label>
                 <input
