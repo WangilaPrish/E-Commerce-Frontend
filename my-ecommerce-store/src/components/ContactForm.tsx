@@ -57,7 +57,7 @@ export default function ContactForm() {
             {/* Card */}
             <div className="rounded-2xl bg-white/80 p-6 shadow-lg backdrop-blur-md">
                 {/* Honeypot (hidden) */}
-                <input name="website" value={""} onChange={() => {}} style={{ display: "none" }} tabIndex={-1} aria-hidden />
+                <input name="website" value={""} onChange={() => { }} style={{ display: "none" }} tabIndex={-1} aria-hidden />
 
                 <div className="grid gap-4 sm:grid-cols-2">
                     <label className="block">
