@@ -77,7 +77,7 @@ export default function ProductsPage() {
                 <h1 className="mb-4 text-3xl font-bold">Products</h1>
                 <ProductsFilter categories={CATEGORIES} initial={{ category: cat, maxPrice }} />
 
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {items.map((p) => (
                         <ProductCard key={p.id} id={p.id} name={p.name} price={p.price} image={p.image} />
                     ))}
@@ -87,7 +87,7 @@ export default function ProductsPage() {
 
                 {items.length < total && !loading && (
                     <div className="mt-6 flex justify-center">
-                        <button onClick={loadMore} className="rounded-md bg-black/90 px-6 py-2 text-white">Load more</button>
+                        <button onClick={loadMore} className="rounded-md bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-500 px-6 py-2 text-white shadow-md hover:opacity-95">Load more</button>
                     </div>
                 )}
             </div>
