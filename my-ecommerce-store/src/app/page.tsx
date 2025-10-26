@@ -18,8 +18,6 @@ export default function Home() {
                 <CategoryGrid />
                 <TopSellers />
                 <Testimonials />
-                <Newsletter />
-                <Footer />
             </main>
         </div>
     );
