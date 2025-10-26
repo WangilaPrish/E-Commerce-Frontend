@@ -16,7 +16,7 @@ export default function Hero() {
     }
 
     return (
-        <section className="relative w-full overflow-hidden rounded-lg bg-linear-to-r from-amber-400 via-orange-400 to-pink-500 p-8 text-white">
+        <section className="relative w-full overflow-hidden rounded-lg bg-linear-to-r from-indigo-600 via-purple-600 to-violet-500 p-8 text-white">
             <div className="mx-auto max-w-6xl grid gap-6 md:grid-cols-2 md:items-center">
                 <div>
                     <div className="inline-flex items-center gap-3">
