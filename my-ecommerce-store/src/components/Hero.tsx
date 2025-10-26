@@ -16,25 +16,25 @@ export default function Hero() {
     }
 
     return (
-        <section className="relative w-full overflow-hidden rounded-lg bg-linear-to-r from-indigo-600 via-purple-600 to-violet-500 p-8 text-white">
-            <div className="mx-auto max-w-6xl grid gap-6 md:grid-cols-2 md:items-center">
+        <section className="relative w-full overflow-hidden rounded-lg bg-linear-to-r from-indigo-600 via-purple-600 to-violet-500 px-4 py-8 sm:px-6 sm:py-12 text-white">
+            <div className="grid w-full gap-6 md:grid-cols-2 md:items-center">
                 <div>
                     <div className="inline-flex items-center gap-3">
                         <span className="rounded-full bg-black/10 px-3 py-1 text-sm font-semibold">New</span>
                         <span className="text-sm">Free shipping over $75</span>
                     </div>
 
-                    <h1 className="mt-4 text-4xl font-extrabold leading-tight">Upgrade your wardrobe — limited time deals</h1>
-                    <p className="mt-3 max-w-xl text-lg">Shop handpicked collections. Quality pieces that last — curated just for you.</p>
+                    <h1 className="mt-4 text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">Upgrade your wardrobe — limited time deals</h1>
+                    <p className="mt-3 max-w-xl text-base sm:text-lg">Shop handpicked collections. Quality pieces that last — curated just for you.</p>
 
-                    <form onSubmit={onSearch} className="mt-6 flex w-full max-w-lg gap-2">
+                    <form onSubmit={onSearch} className="mt-6 flex w-full max-w-full gap-2">
                         <label htmlFor="hero-search" className="sr-only">Search products</label>
                         <input
                             id="hero-search"
                             value={q}
                             onChange={(e) => setQ(e.target.value)}
                             placeholder="Search products, e.g. 'sneakers'"
-                            className="flex-1 rounded-md border border-white/30 bg-white/10 px-4 py-2 text-white placeholder:text-white/70 focus:outline-none"
+                            className="flex-1 min-w-0 rounded-md border border-white/30 bg-white/10 px-4 py-2 text-white placeholder:text-white/70 focus:outline-none"
                         />
                         <button type="submit" className="rounded-md bg-black/90 px-4 py-2 font-semibold">Search</button>
                     </form>
